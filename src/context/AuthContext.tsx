@@ -31,23 +31,42 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setIsLoading(true);
     try {
       const savedToken = await getToken();
-      if (savedToken) {
-        setToken(savedToken);
+      if (!savedToken) {
+        console.log('ℹ️  No saved token found, redirecting to login');
+        router.replace('/(auth)/login');
+        setIsLoading(false);
+        return;
+      }
+      
+      setToken(savedToken);
+      
+      try {
+        // ✅ FIX: Wait for profile load before redirect
+        console.log('👤 Loading user profile...');
         const userProfile = await authService.getProfile();
         setUser(userProfile);
-        // Navigate to tabs immediately
-        setTimeout(() => {
-          router.replace('/(tabs)');
-        }, 100);
-      } else {
-        // Redirect to login if not authenticated
-        setTimeout(() => {
-          router.replace('/(auth)/login');
-        }, 100);
+        console.log('✅ Profile loaded successfully');
+        
+        // Now safe to redirect
+        router.replace('/(tabs)');
+      } catch (profileError) {
+        console.error('❌ Profile load failed:', profileError);
+        // Profile load failed, clear and redirect to login
+        await removeToken();
+        setToken(null);
+        setUser(null);
+        router.replace('/(auth)/login');
       }
     } catch (error) {
       console.error('Auto login check failed:', error);
-      await cleanLogout();
+      setToken(null);
+      setUser(null);
+      await removeToken();
+      router.replace('/(auth)/login');
+    } finally {
+      setIsLoading(false);
+    }
+  };
     } finally {
       setIsLoading(false);
     }
@@ -91,21 +110,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     console.log('📤 logout() called');
     setIsLoading(true);
     try {
+      // ✅ FIX: Clear state FIRST, then remove token, then redirect
+      // This prevents race conditions with 401 interceptor
+      
+      console.log('Clearing state immediately...');
+      setToken(null);
+      setUser(null);
+      
       console.log('Removing token from storage...');
       await removeToken();
       console.log('✅ Token removed');
       
-      console.log('Clearing state...');
-      setToken(null);
-      setUser(null);
-      console.log('✅ State cleared');
-      
       console.log('🔀 Redirecting to login...');
-      // Redirect with a small delay to ensure state updates
-      setTimeout(() => {
-        router.replace('/(auth)/login');
-        console.log('✅ Redirect completed');
-      }, 100);
+      router.replace('/(auth)/login');
       
     } catch (error) {
       console.error('❌ logout() error:', error);
@@ -117,9 +134,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       } catch (e) {
         console.error('Error in force remove:', e);
       }
-      setTimeout(() => {
-        router.replace('/(auth)/login');
-      }, 100);
+      router.replace('/(auth)/login');
     } finally {
       setIsLoading(false);
     }

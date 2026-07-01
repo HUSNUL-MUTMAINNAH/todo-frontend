@@ -10,7 +10,7 @@ console.log('🔧 API Configuration:', { BACKEND_URL, platform: Platform.OS, NOD
 
 const api = axios.create({
   baseURL: BACKEND_URL,
-  timeout: 10000,
+  timeout: 30000,  // ✅ INCREASED from 10000 for Vercel serverless latency
   headers: {
     "Content-Type": "application/json",
   },
@@ -37,6 +37,21 @@ api.interceptors.response.use(
   },
   async (error) => {
     console.log('📡 Response interceptor caught error:', error.response?.status);
+    
+    // ✅ ADD RETRY LOGIC for network errors
+    const config = error.config;
+    if (config && !config.retry) {
+      config.retry = 0;
+    }
+    
+    // Retry for network timeout (ECONNABORTED) or 5xx errors
+    if ((error.code === 'ECONNABORTED' || (error.response && error.response.status >= 500)) && config.retry < 3) {
+      config.retry += 1;
+      const delayMs = 1000 * config.retry; // exponential backoff
+      console.log(`⏳ Retrying request (attempt ${config.retry}/3) after ${delayMs}ms...`);
+      await new Promise(resolve => setTimeout(resolve, delayMs));
+      return api(config);
+    }
     
     if (error.response && error.response.status === 401) {
       console.log('🔴 401 Unauthorized - token is invalid or expired');
