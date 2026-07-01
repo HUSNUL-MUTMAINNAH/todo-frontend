@@ -5,6 +5,8 @@ import { useForm, Controller } from 'react-hook-form';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
+import { removeToken } from '../../services/secureStore';
+import { router } from 'expo-router';
 
 const PRESET_AVATARS = [
   'https://api.dicebear.com/7.x/adventurer/svg?seed=Felix',
@@ -63,28 +65,21 @@ export default function SettingsScreen() {
     }
   };
 
-  const handleLogout = () => {
-    Alert.alert(
-      'Keluar Aplikasi',
-      'Apakah Anda yakin ingin keluar dari akun Anda?',
-      [
-        { text: 'Batal', style: 'cancel' },
-        { 
-          text: 'Keluar', 
-          style: 'destructive', 
-          onPress: async () => {
-            console.log('🔐 User confirmed logout');
-            try {
-              await logout();
-              console.log('✅ Logout successful');
-            } catch (error) {
-              console.error('❌ Logout failed:', error);
-              Alert.alert('Error', 'Gagal keluar dari akun. Coba lagi.');
-            }
-          }
-        }
-      ]
-    );
+  const handleLogout = async () => {
+    console.log('🔐 handleLogout called');
+    const confirmed = window.confirm('Apakah Anda yakin ingin keluar dari akun Anda?');
+    console.log('User confirmed:', confirmed);
+    
+    if (confirmed) {
+      console.log('🔐 User confirmed logout, calling logout()...');
+      try {
+        await logout();
+        console.log('✅ Logout successful from handleLogout');
+      } catch (error) {
+        console.error('❌ Logout failed from handleLogout:', error);
+        Alert.alert('Error', 'Gagal keluar dari akun. Silakan restart aplikasi.');
+      }
+    }
   };
 
   const styles = StyleSheet.create({
