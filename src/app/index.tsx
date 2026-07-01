@@ -3,6 +3,7 @@ import { View, ActivityIndicator, StyleSheet } from 'react-native';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 
+// 🚀 Force rebuild v2.0 - Backend patches applied (2026-07-01 14:40 UTC)
 export default function InitialRoute() {
   const { colors } = useTheme();
   // AuthContext handles initial auto-login checks and routing internally on load
