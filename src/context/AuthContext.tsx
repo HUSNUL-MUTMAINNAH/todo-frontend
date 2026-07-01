@@ -73,10 +73,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setIsLoading(true);
     try {
       const response = await authService.register(fullname, email, password);
-      await saveToken(response.token);
-      setToken(response.token);
-      setUser(response.user);
-      router.replace('/(tabs)');
+      // ✅ PERUBAHAN: Setelah register berhasil, redirect ke login
+      // Jangan simpan token, user harus login ulang
+      console.log('✅ Register successful, redirecting to login...');
+      setTimeout(() => {
+        router.replace('/(auth)/login');
+      }, 500);
     } catch (error: any) {
       const message = error.response?.data?.message || 'Registrasi gagal. Hubungi admin.';
       throw new Error(message);
@@ -85,39 +87,39 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
-  const cleanLogout = async () => {
-    console.log('🔄 Logging out...');
-    try {
-      await removeToken();
-      console.log('✅ Token removed');
-    } catch (error) {
-      console.error('Error removing token:', error);
-    }
-    
-    setToken(null);
-    setUser(null);
-    console.log('✅ State cleared, redirecting to login...');
-    
-    // Use setTimeout to ensure state updates are processed
-    setTimeout(() => {
-      console.log('🔀 Redirecting to login...');
-      router.replace('/(auth)/login');
-    }, 100);
-  };
-
   const logout = async () => {
-    console.log('📤 Logout initiated');
+    console.log('📤 logout() called');
     setIsLoading(true);
     try {
-      await cleanLogout();
-      console.log('✅ Logout complete');
-    } catch (error) {
-      console.error('❌ Logout error:', error);
-      // Force logout even if there's an error
+      console.log('Removing token from storage...');
+      await removeToken();
+      console.log('✅ Token removed');
+      
+      console.log('Clearing state...');
       setToken(null);
       setUser(null);
-      await removeToken();
-      router.replace('/(auth)/login');
+      console.log('✅ State cleared');
+      
+      console.log('🔀 Redirecting to login...');
+      // Redirect with a small delay to ensure state updates
+      setTimeout(() => {
+        router.replace('/(auth)/login');
+        console.log('✅ Redirect completed');
+      }, 100);
+      
+    } catch (error) {
+      console.error('❌ logout() error:', error);
+      // Force clear state even if there's an error
+      setToken(null);
+      setUser(null);
+      try {
+        await removeToken();
+      } catch (e) {
+        console.error('Error in force remove:', e);
+      }
+      setTimeout(() => {
+        router.replace('/(auth)/login');
+      }, 100);
     } finally {
       setIsLoading(false);
     }
