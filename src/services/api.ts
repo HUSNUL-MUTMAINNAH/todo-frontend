@@ -3,15 +3,10 @@ import { router } from "expo-router";
 import { Platform } from "react-native";
 import { getToken, removeToken } from "./secureStore";
 
-// Use environment variable or fallback to Vercel backend URL
-const BACKEND_URL = Platform.select({
-  android: "https://todo-backend-eight-woad.vercel.app",
-  ios: "https://todo-backend-eight-woad.vercel.app",
-  web: process.env.EXPO_PUBLIC_BACKEND_URL || "https://todo-backend-eight-woad.vercel.app",
-  default: "https://todo-backend-eight-woad.vercel.app",
-});
+// Hardcode backend URL - bukan menggunakan process.env karena Expo export tidak mendukungnya
+const BACKEND_URL = "https://todo-backend-eight-woad.vercel.app";
 
-console.log('🔧 API Configuration:', { BACKEND_URL, platform: Platform.OS });
+console.log('🔧 API Configuration:', { BACKEND_URL, platform: Platform.OS, NODE_ENV: process.env.NODE_ENV });
 
 const api = axios.create({
   baseURL: BACKEND_URL,
