@@ -32,17 +32,25 @@ export default function DashboardScreen() {
 
   const loadData = useCallback(async () => {
     try {
+      console.log('📊 Dashboard: Starting to load data...');
+      
       // 1. Fetch dashboard stats
+      console.log('📊 Dashboard: Fetching stats...');
       const fetchedStats = await taskService.getStats();
+      console.log('✅ Dashboard: Stats fetched successfully', fetchedStats);
       setStats(fetchedStats);
 
       // 2. Fetch notifications count
+      console.log('📬 Dashboard: Fetching notifications...');
       const notifications = await notificationService.getNotifications();
+      console.log('✅ Dashboard: Notifications fetched', notifications.length);
       const unread = notifications.filter(n => !n.is_read).length;
       setUnreadNotifications(unread);
 
       // 3. Fetch tasks for selected date
+      console.log('📝 Dashboard: Fetching tasks for date:', selectedDate);
       const fetchedTasks = await taskService.getTasks({ date: selectedDate });
+      console.log('✅ Dashboard: Tasks fetched', fetchedTasks.length);
       setTasks(fetchedTasks);
 
       // 4. Fetch all tasks for current week to populate calendar priority dots
@@ -68,15 +76,24 @@ export default function DashboardScreen() {
         }
       });
       setWeeklyTasksIndicators(indicatorsMap);
+      console.log('✅ Dashboard: All data loaded successfully');
 
     } catch (error: any) {
-      console.error('Failed to load dashboard data:', error);
+      console.error('❌ Failed to load dashboard data:', error);
+      console.error('❌ Error details:', {
+        message: error.message,
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        data: error.response?.data,
+        url: error.config?.url,
+        baseURL: error.config?.baseURL,
+        method: error.config?.method,
+        code: error.code
+      });
       
       // Handle 401 unauthorized - token expired or invalid
       if (error.response?.status === 401) {
         console.warn('⚠️  Token invalid or expired, auto-logout triggered');
-        // axios interceptor should handle this, but as fallback:
-        // just show empty state instead of crashing
       }
     }
   }, [selectedDate]);
