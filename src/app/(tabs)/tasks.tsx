@@ -370,13 +370,18 @@ export default function TasksScreen() {
           <View style={styles.filterSection}>
             <Text style={styles.filterLabel}>Status</Text>
             <View style={styles.pillsRow}>
-              {['Pending', 'In Progress', 'Completed', 'Overdue'].map((status) => (
+              {[
+                { value: 'Pending', label: 'To Do' },
+                { value: 'In Progress', label: 'In Progress' },
+                { value: 'Completed', label: 'Completed' },
+                { value: 'Overdue', label: 'Overdue' }
+              ].map((status) => (
                 <TouchableOpacity
-                  key={status}
-                  style={[styles.pill, selectedStatus === status && styles.activePill]}
-                  onPress={() => setSelectedStatus(selectedStatus === status ? '' : status)}
+                  key={status.value}
+                  style={[styles.pill, selectedStatus === status.value && styles.activePill]}
+                  onPress={() => setSelectedStatus(selectedStatus === status.value ? '' : status.value)}
                 >
-                  <Text style={[styles.pillText, selectedStatus === status && styles.activePillText]}>{status}</Text>
+                  <Text style={[styles.pillText, selectedStatus === status.value && styles.activePillText]}>{status.label}</Text>
                 </TouchableOpacity>
               ))}
             </View>
