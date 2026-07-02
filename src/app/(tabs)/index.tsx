@@ -396,7 +396,7 @@ export default function DashboardScreen() {
             percentageBg="#B3E5FC"
           />
           <StatCard
-            title="Pending"
+            title="To Do"
             count={stats.pending}
             icon="clock-outline"
             iconBg="#FFFDE7"

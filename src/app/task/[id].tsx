@@ -97,7 +97,7 @@ export default function TaskDetailScreen() {
       case 'Completed': return 'Selesai';
       case 'Overdue': return 'Overdue (Terlewat)';
       case 'In Progress': return 'Sedang Dikerjakan';
-      default: return 'Pending';
+      default: return 'To Do';
     }
   };
 
