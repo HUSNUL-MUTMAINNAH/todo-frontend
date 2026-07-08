@@ -30,7 +30,7 @@ export default function TaskCard({ task, onToggleComplete, onEdit, onDelete, onP
       case 'In Progress':
         return { bg: '#E3F2FD', text: '#1565C0', label: 'In Progress' };
       default:
-        return { bg: '#FFFDE7', text: '#F57F17', label: 'To Do' };
+        return { bg: '#FFFDE7', text: '#F57F17', label: 'Pending' };
     }
   };
 

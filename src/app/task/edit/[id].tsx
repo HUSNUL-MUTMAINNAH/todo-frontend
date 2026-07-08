@@ -439,18 +439,13 @@ export default function EditTaskScreen() {
           <View style={styles.inputWrapper}>
             <Text style={styles.fieldLabel}>Status</Text>
             <View style={styles.pillRow}>
-              {[
-                { value: 'Pending', label: 'To Do' },
-                { value: 'In Progress', label: 'In Progress' },
-                { value: 'Completed', label: 'Completed' },
-                { value: 'Overdue', label: 'Overdue' }
-              ].map((s) => (
+              {['Pending', 'In Progress', 'Completed', 'Overdue'].map((s) => (
                 <TouchableOpacity
-                  key={s.value}
-                  style={[styles.pill, selectedStatus === s.value && styles.activePill]}
-                  onPress={() => setValue('status', s.value as any)}
+                  key={s}
+                  style={[styles.pill, selectedStatus === s && styles.activePill]}
+                  onPress={() => setValue('status', s as any)}
                 >
-                  <Text style={[styles.pillText, selectedStatus === s.value && styles.activePillText]}>{s.label}</Text>
+                  <Text style={[styles.pillText, selectedStatus === s && styles.activePillText]}>{s}</Text>
                 </TouchableOpacity>
               ))}
             </View>
