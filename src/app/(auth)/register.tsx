@@ -164,6 +164,7 @@ export default function RegisterScreen() {
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
+                  testID="register-fullname-input"
                   mode="outlined"
                   outlineColor={colors.border}
                   activeOutlineColor={colors.primary}

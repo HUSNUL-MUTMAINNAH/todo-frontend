@@ -159,9 +159,17 @@ export default function TaskCard({ task, onToggleComplete, onEdit, onDelete, onP
   });
 
   return (
-    <TouchableOpacity style={styles.card} onPress={() => onPress(task.id)} activeOpacity={0.9}>
+    <TouchableOpacity 
+      testID={`task-card-${task.id}`}
+      accessibilityLabel={`Task: ${task.title}`}
+      style={styles.card} 
+      onPress={() => onPress(task.id)} 
+      activeOpacity={0.9}
+    >
       {/* Checkbox */}
       <TouchableOpacity 
+        testID={`task-checkbox-${task.id}`}
+        accessibilityLabel={isCompleted ? "Mark as incomplete" : "Mark as complete"}
         style={[styles.checkbox, isCompleted && styles.checkedBox]}
         onPress={() => onToggleComplete(task.id, !isCompleted)}
       >
@@ -212,6 +220,8 @@ export default function TaskCard({ task, onToggleComplete, onEdit, onDelete, onP
           onDismiss={() => setMenuVisible(false)}
           anchor={
             <IconButton
+              testID={`task-menu-${task.id}`}
+              accessibilityLabel="Task options menu"
               icon="dots-vertical"
               size={20}
               iconColor={colors.textPrimary}
@@ -220,16 +230,19 @@ export default function TaskCard({ task, onToggleComplete, onEdit, onDelete, onP
           }
         >
           <Menu.Item 
+            testID={`task-view-${task.id}`}
             onPress={() => { setMenuVisible(false); onPress(task.id); }} 
             title="Lihat Detail" 
             leadingIcon="eye"
           />
           <Menu.Item 
+            testID={`task-edit-${task.id}`}
             onPress={() => { setMenuVisible(false); onEdit(task); }} 
             title="Edit" 
             leadingIcon="pencil"
           />
           <Menu.Item 
+            testID={`task-delete-${task.id}`}
             onPress={() => { setMenuVisible(false); onDelete(task.id); }} 
             title="Hapus" 
             leadingIcon="delete"

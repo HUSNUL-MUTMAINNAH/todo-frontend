@@ -163,6 +163,7 @@ export default function LoginScreen() {
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
+                  testID="login-email-input"
                   mode="outlined"
                   outlineColor={colors.border}
                   activeOutlineColor={colors.primary}
@@ -196,6 +197,7 @@ export default function LoginScreen() {
               }}
               render={({ field: { onChange, onBlur, value } }) => (
                 <TextInput
+                  testID="login-password-input"
                   mode="outlined"
                   outlineColor={colors.border}
                   activeOutlineColor={colors.primary}
@@ -221,6 +223,7 @@ export default function LoginScreen() {
           </View>
 
           <Button
+            testID="login-submit-button"
             mode="contained"
             onPress={handleSubmit(onSubmit)}
             loading={isSubmitting}

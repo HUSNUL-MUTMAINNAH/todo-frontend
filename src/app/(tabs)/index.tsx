@@ -438,16 +438,21 @@ export default function DashboardScreen() {
         {/* Task list row header */}
         <View style={styles.addBtnRow}>
           <Text style={styles.sectionTitle}>Daftar Task</Text>
-          <TouchableOpacity style={styles.addTaskBtn} onPress={() => router.push('/task/add')}>
+          <TouchableOpacity 
+            testID="add-task-button"
+            accessibilityLabel="Add new task"
+            style={styles.addTaskBtn} 
+            onPress={() => router.push('/task/add')}
+          >
             <MaterialCommunityIcons name="plus" size={16} color="#1E1E24" />
             <Text style={styles.addTaskBtnText}>Tambah Task</Text>
           </TouchableOpacity>
         </View>
 
         {/* Today's / selected day's Tasks List */}
-        <View style={styles.taskListWrapper}>
+        <View testID="task-list-container" style={styles.taskListWrapper}>
           {tasks.length === 0 ? (
-            <Text style={styles.emptyText}>Tidak ada tugas untuk tanggal ini.</Text>
+            <Text testID="empty-task-list" style={styles.emptyText}>Tidak ada tugas untuk tanggal ini.</Text>
           ) : (
             tasks.map(task => (
               <TaskCard
@@ -463,7 +468,12 @@ export default function DashboardScreen() {
         </View>
 
         {/* View all button */}
-        <TouchableOpacity style={styles.viewAllFooterBtn} onPress={() => router.push('/(tabs)/tasks')}>
+        <TouchableOpacity 
+          testID="view-all-tasks-button"
+          accessibilityLabel="View all tasks"
+          style={styles.viewAllFooterBtn} 
+          onPress={() => router.push('/(tabs)/tasks')}
+        >
           <Text style={styles.viewAllFooterBtnText}>Lihat Semua Task</Text>
           <MaterialCommunityIcons name="chevron-right" size={18} color={colors.textPrimary} />
         </TouchableOpacity>

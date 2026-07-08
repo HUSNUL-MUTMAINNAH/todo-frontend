@@ -36,6 +36,7 @@
     "react-native-worklets": "0.8.3"
   },
   "devDependencies": {
+    "@playwright/test": "^1.61.1",
     "@types/react": "~19.2.2",
     "typescript": "~6.0.3"
   },
@@ -46,7 +47,13 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "build": "expo export -p web",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:e2e:headed": "playwright test --headed",
+    "test:e2e:debug": "playwright test --debug",
+    "test:e2e:report": "playwright show-report",
+    "test:e2e:dashboard": "node e2e/generate-dashboard.js"
   },
   "private": true
 }
