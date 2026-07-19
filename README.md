@@ -1,56 +1,253 @@
-# Welcome to your Expo app 👋
+# Todo Frontend
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Frontend aplikasi todo management menggunakan Expo, React Native, dan TypeScript.
 
-## Get started
+## Fitur
 
-1. Install dependencies
+- **Cross-Platform** - Berjalan di iOS, Android, dan Web
+- **Authentication** - User login dan register
+- **Task Management** - Create, read, update, delete tasks
+- **Categories** - Organize tasks dengan categories
+- **Real-time Notifications** - Push notifications untuk updates
+- **Offline Support** - Local storage untuk offline functionality
+- **E2E Testing** - Automated testing dengan Playwright
+- **TypeScript** - Type-safe development
 
-   ```bash
-   npm install
-   ```
+## Tech Stack
 
-2. Start the app
+- **Expo** - Cross-platform development platform
+- **React Native** - Mobile framework
+- **TypeScript** - Type-safe JavaScript
+- **Expo Router** - Navigation dengan file-based routing
+- **Context API** - State management
+- **Playwright** - E2E testing
+- **Expo Go** - Development client
 
-   ```bash
-   npx expo start
-   ```
+## Prerequisites
 
-In the output, you'll find options to open the app in a
+- Node.js (v16 atau lebih tinggi)
+- npm atau yarn
+- Expo CLI
+- iOS Simulator / Android Emulator (untuk testing)
+- Expo Go app (untuk mobile testing)
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Setup
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+### Installation
 
-## Get a fresh project
-
-When you're ready, run:
-
+1. Clone repository
 ```bash
-npm run reset-project
+git clone https://github.com/HUSNUL-MUTMAINNAH/todo-frontend.git
+cd todo-frontend
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+2. Install dependencies
+```bash
+npm install
+```
 
-### Other setup steps
+3. Setup environment variables
+```bash
+cp .env.example .env.local
+```
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+Edit `.env.local`:
+```
+EXPO_PUBLIC_API_URL=http://localhost:3000
+EXPO_PUBLIC_APP_ENV=development
+```
 
-## Learn more
+## Development
 
-To learn more about developing your project with Expo, look at the following resources:
+### Start Expo Development Server
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+```bash
+npx expo start
+```
 
-## Join the community
+Setelah server dimulai, tekan:
+- `i` - Open iOS Simulator
+- `a` - Open Android Emulator
+- `w` - Open Web version
+- `j` - Open debugger
 
-Join our community of developers creating universal apps.
+### Android Development
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Memerlukan Android Studio dan Android SDK:
+```bash
+npx expo start --android
+```
+
+### iOS Development
+
+Memerlukan Xcode (macOS only):
+```bash
+npx expo start --ios
+```
+
+### Web Development
+
+Development web version:
+```bash
+npx expo start --web
+```
+
+Akses di `http://localhost:19006`
+
+## Project Structure
+
+```
+src/
+├── app/                    # App pages (file-based routing)
+├── components/            # Reusable components
+├── services/              # API services
+├── context/               # Context API for state management
+├── hooks/                 # Custom React hooks
+├── utils/                 # Utility functions
+├── constants/             # Constants dan config
+└── global.css            # Global styles
+
+e2e/                       # End-to-end tests
+├── auth.spec.ts          # Authentication tests
+├── tasks.spec.ts         # Task management tests
+└── notifications.spec.ts # Notification tests
+
+scripts/
+├── reset-project.js      # Reset project script
+```
+
+## Screens
+
+- **Login** - User authentication
+- **Register** - Create new account
+- **Dashboard** - Overview dan quick stats
+- **Tasks** - View dan manage tasks
+- **Categories** - Manage task categories
+- **Profile** - User profile settings
+- **Notifications** - View notifications
+
+## API Integration
+
+Frontend terhubung dengan todo-backend API. Setup:
+
+1. Pastikan backend server running
+2. Set `EXPO_PUBLIC_API_URL` di `.env.local`
+3. Test koneksi dengan authentication
+
+## Testing
+
+### E2E Testing
+
+Jalankan Playwright e2e tests:
+```bash
+npm run test:e2e
+```
+
+Test coverage:
+- Authentication flows (login, register, logout)
+- Task CRUD operations
+- Category management
+- Notification handling
+
+### Manual Testing
+
+Untuk testing manual, gunakan:
+- **iOS Simulator** - XCode tools
+- **Android Emulator** - Android Studio
+- **Web Browser** - Expo web version
+- **Expo Go** - Mobile app untuk real device testing
+
+## Build
+
+### Production Build
+
+Web build:
+```bash
+npx expo export --platform web
+```
+
+Outputs ke folder `dist/`
+
+### EAS Build (Native Builds)
+
+Setup EAS:
+```bash
+npm install -g eas-cli
+eas build --platform ios
+eas build --platform android
+```
+
+Requires EAS account dan billing.
+
+## Scripts
+
+```json
+{
+  "start": "expo start",
+  "android": "expo start --android",
+  "ios": "expo start --ios",
+  "web": "expo start --web",
+  "reset-project": "node scripts/reset-project.js",
+  "test:e2e": "playwright test",
+  "test:e2e:debug": "playwright test --debug"
+}
+```
+
+## Environment Variables
+
+| Variable | Description |
+|----------|-------------|
+| EXPO_PUBLIC_API_URL | Backend API URL |
+| EXPO_PUBLIC_APP_ENV | App environment (development/production) |
+
+## Deployment
+
+### Web Deployment (Vercel)
+
+1. Build untuk web:
+```bash
+npx expo export --platform web
+```
+
+2. Push ke GitHub
+3. Connect ke Vercel
+4. Vercel akan otomatis deploy
+
+### Mobile Deployment
+
+- **iOS** - EAS Build → TestFlight → App Store
+- **Android** - EAS Build → Google Play Console
+
+## Troubleshooting
+
+### Metro Bundler Issues
+```bash
+npx expo start --clear
+```
+
+### Module Not Found
+```bash
+rm -rf node_modules
+npm install
+npx expo start --clear
+```
+
+### Port Already in Use
+```bash
+npx expo start --port 8081
+```
+
+## Documentation Files
+
+- `TESTING.md` - Testing documentation
+- `E2E-TEST-RESULTS.md` - E2E test results
+- `AGENTS.md` - Agent configuration
+- `e2e/README.md` - E2E testing guide
+
+## Support
+
+Untuk pertanyaan atau issues, buat issue di GitHub repository.
+
+## License
+
+MIT
